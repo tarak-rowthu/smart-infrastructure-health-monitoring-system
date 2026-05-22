@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Logs - IoT Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <i class="ph ph-cpu brand-icon"></i>
+                <span class="brand-text">Infrastructure Monitoring</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="ph ph-squares-four"></i> <span>Dashboard</span></a></li>
+                <li><a href="sensors.html"><i class="ph ph-broadcast"></i> <span>Sensors</span></a></li>
+                <li><a href="buildings.html"><i class="ph ph-buildings"></i> <span>Buildings</span></a></li>
+                <li><a href="alerts.html"><i class="ph ph-warning-circle"></i> <span>Alerts</span></a></li>
+                <li><a href="data.html" class="active"><i class="ph ph-database"></i> <span>Data Logs</span></a></li>
+            </ul>
+            <div class="logout-container">
+                <a href="#" onclick="logout()" class="btn btn-block logout-btn" style="background: none; border: 1px solid var(--danger-bg);"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </nav>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="user-profile">
+                    <div class="user-info" style="text-align: right;">
+                        <span class="user-name" id="header-user-name">Loading...</span>
+                        <span class="user-role" id="header-user-role">...</span>
+                    </div>
+                    <div class="user-avatar" id="header-user-avatar">?</div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <header>
+                    <h1 class="page-title">Historical Data Logs</h1>
+                    <p class="page-subtitle">Comprehensive archive of all telemetry and metrics</p>
+                </header>
+
+                <div class="glass-panel" style="padding: 1.5rem; overflow: hidden;">
+                    <div class="controls-bar">
+                        <div style="position: relative; width: 300px;">
+                            <i class="ph ph-magnifying-glass" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            <input type="text" id="filter-sensor" class="input-field" placeholder="Search by ID or Type..." style="padding-left: 2.5rem;">
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Sensor ID</th>
+                                    <th>Metric</th>
+                                    <th>Room</th>
+                                    <th>Value</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/background.js"></script>
+    <script src="js/api.js?v=8"></script>
+    <script src="js/app.js?v=8"></script>
+</body>
+</html>

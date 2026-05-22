@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Sensor - IoT Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+    <div class="login-card glass-panel" style="max-width: 500px;">
+        <div class="login-brand-icon">
+            <i class="ph ph-plus-circle"></i>
+        </div>
+        <h1 class="login-title">Register Sensor</h1>
+        <p class="login-subtitle">Add hardware to the monitoring infrastructure</p>
+        
+        <div id="message" class="error-message"></div>
+        
+        <form id="addSensorForm">
+            <div class="form-group">
+                <label for="sensor_ID">Sensor ID (Numeric)</label>
+                <input type="number" id="sensor_ID" class="input-field" required placeholder="e.g. 101">
+            </div>
+
+            <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                    <label for="sensortype_ID">Sensor Type</label>
+                    <select id="sensortype_ID" class="input-field" required>
+                        <option value="" disabled selected>Loading Types...</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                    <label for="Room_ID">Room Number</label>
+                    <select id="Room_ID" class="input-field" required>
+                        <option value="" disabled selected>Loading Rooms...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="Technician">Technician Name</label>
+                <input type="text" id="Technician" class="input-field" required placeholder="Name of installer">
+            </div>
+
+            <div class="form-group">
+                <label for="Install_Date">Installation Date</label>
+                <input type="date" id="Install_Date" class="input-field" required>
+            </div>
+            
+            <button type="submit" class="btn btn-block" style="margin-top: 2rem;">
+                Deploy Sensor <i class="ph ph-check-circle"></i>
+            </button>
+        </form>
+
+        <p style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem; color: #94a3b8;">
+            <a href="index.html" style="color: #4facfe; text-decoration: none; font-weight: 500;"><i class="ph ph-arrow-left"></i> Back to Dashboard</a>
+        </p>
+    </div>
+
+    <script src="js/background.js"></script>
+    <script src="js/add-sensor.js"></script>
+</body>
+</html>

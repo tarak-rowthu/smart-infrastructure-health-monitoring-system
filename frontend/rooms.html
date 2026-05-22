@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Details - IoT Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <i class="ph ph-cpu brand-icon"></i>
+                <span class="brand-text">IoT Core</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="ph ph-squares-four"></i> <span>Dashboard</span></a></li>
+                <li><a href="sensors.html"><i class="ph ph-broadcast"></i> <span>Sensors</span></a></li>
+                <li><a href="buildings.html" class="active"><i class="ph ph-buildings"></i> <span>Buildings</span></a></li>
+                <li><a href="alerts.html"><i class="ph ph-warning-circle"></i> <span>Alerts</span></a></li>
+                <li><a href="data.html"><i class="ph ph-database"></i> <span>Data Logs</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="user-profile">
+                    <div class="user-info" style="text-align: right;">
+                        <span class="user-name">Facility Manager</span>
+                        <span class="user-role">Manager</span>
+                    </div>
+                    <div class="user-avatar">F</div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="flex-between" style="margin-bottom: 2rem;">
+                    <div>
+                        <h1 class="page-title" id="building-title">Loading Infrastructure...</h1>
+                        <p class="page-subtitle" id="building-subtitle">View all monitored rooms in this building</p>
+                    </div>
+                    <a href="buildings.html" class="btn" style="background-color: var(--bg-surface); border: 1px solid var(--border);"><i class="ph ph-arrow-left"></i> Back to Buildings</a>
+                </div>
+
+                <!-- Rooms Table -->
+                <div class="glass-panel" style="padding: 1.5rem; overflow: hidden;">
+                    <div class="table-container">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Room Identify</th>
+                                    <th>Floor Designation</th>
+                                    <th>Level</th>
+                                </tr>
+                            </thead>
+                            <tbody id="building-rooms-body">
+                                <tr><td colspan="3" style="text-align: center;">Initializing...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Self-contained robust script for fetching and rendering -->
+    <script>
+        (async () => {
+            const titleEl = document.getElementById('building-title');
+            const subtitleEl = document.getElementById('building-subtitle');
+            const tableBody = document.getElementById('building-rooms-body');
+
+            const params = new URLSearchParams(window.location.search);
+            const building_id = params.get('building_id') || params.get('id') || '1';
+
+            try {
+                const [roomsRes, buildingsRes] = await Promise.all([
+                    fetch(`http://localhost:3000/buildings/${building_id}/rooms`),
+                    fetch(`http://localhost:3000/api/buildings`)
+                ]);
+
+                if (!roomsRes.ok) throw new Error(`Server error: ${roomsRes.status}`);
+
+                const rooms = await roomsRes.json();
+                const buildingsData = await buildingsRes.json();
+                const allBuildings = buildingsData.success ? buildingsData.data : [];
+                const building = allBuildings.find(b => String(b.Building_ID) === String(building_id));
+
+                if (building) {
+                    titleEl.textContent = building.Building_Name + ' Rooms';
+                    if (subtitleEl) subtitleEl.textContent = 'Location: ' + building.Location + '  |  Type: ' + building.Type;
+                } else {
+                    titleEl.textContent = 'Building #' + building_id + ' Rooms';
+                }
+
+                tableBody.innerHTML = '';
+
+                if (!rooms || rooms.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No rooms assigned to this building.</td></tr>';
+                    return;
+                }
+
+                rooms.forEach((room, index) => {
+                    const tr = document.createElement('tr');
+                    tr.style.animationDelay = (index * 0.05) + 's';
+                    tr.innerHTML = '<td><i class="ph ph-door" style="color: var(--text-muted); margin-right: 0.5rem;"></i> Room ' + (room.Room_Number || '-') + '</td>' +
+                        '<td>' + (room.Floor_Name || '-') + '</td>' +
+                        '<td>' + (room.Floor_Number ? 'Floor ' + room.Floor_Number : '-') + '</td>';
+                    tableBody.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error('Failed to load rooms:', error);
+                titleEl.textContent = 'Connection Error';
+                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#ef4444;">Could not connect to backend on port 3000.<br><br><small>' + error.message + '</small></td></tr>';
+            }
+        })();
+    </script>
+    <script src="js/background.js"></script>
+</body>
+</html>
