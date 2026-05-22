@@ -7,13 +7,19 @@ const http = require('http');
 const mysql = require('mysql2');
 const { Server } = require('socket.io');
 
+// ============================
 // Route Imports
+// ============================
+
 const sensorRoutes = require('./routes/sensorRoutes');
 const authRoutes = require('./routes/authRoutes');
 const buildingRoutes = require('./routes/buildingRoutes');
 const alertRoutes = require('./routes/alertRoutes');
 
+// ============================
 // App Initialization
+// ============================
+
 const app = express();
 const server = http.createServer(app);
 
@@ -38,6 +44,9 @@ db.connect((err) => {
     }
 });
 
+// Make db accessible globally if needed
+module.exports = db;
+
 // ============================
 // Socket.io Configuration
 // ============================
@@ -49,9 +58,16 @@ const io = new Server(server, {
     }
 });
 
+// ============================
 // Socket Service Initialization
-const socketService = require('./utils/socketService');
-socketService.init(io);
+// ============================
+
+try {
+    const socketService = require('./utils/socketService');
+    socketService.init(io);
+} catch (err) {
+    console.log('Socket service not loaded:', err.message);
+}
 
 // ============================
 // Middleware
@@ -80,6 +96,17 @@ app.use('/api/buildings', buildingRoutes);
 app.use('/api/alerts', alertRoutes);
 
 // ============================
+// Health Check Route
+// ============================
+
+app.get('/health', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Backend Running Successfully'
+    });
+});
+
+// ============================
 // Root Endpoint
 // ============================
 
@@ -91,7 +118,7 @@ app.get('/', (req, res) => {
 // React Catch-All Route
 // ============================
 
-app.get('/*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
