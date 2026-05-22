@@ -6,14 +6,16 @@ const pool = mysql.createPool({
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 60000
 });
 
 pool.getConnection()
     .then(connection => {
-        console.log('Successfully connected to the database.');
+        console.log('MySQL Connected Successfully');
         connection.release();
     })
     .catch(err => {

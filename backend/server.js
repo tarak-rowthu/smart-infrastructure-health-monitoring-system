@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-const mysql = require('mysql2');
 const { Server } = require('socket.io');
 
 // ============================
@@ -33,26 +32,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ============================
-// MySQL Database Connection
-// ============================
-
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    connectTimeout: 60000
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error('Database connection failed:', err);
-    } else {
-        console.log('MySQL Connected Successfully');
-    }
-});
+// Removed redundant MySQL Database Connection as it's handled by config/db.js
 
 // ============================
 // Socket.io Configuration
@@ -66,11 +46,11 @@ const io = new Server(server, {
 });
 
 // ============================
-// SOCKET SERVICE DISABLED
+// Socket Service Initialization
 // ============================
 
-// const socketService = require('./utils/socketService');
-// socketService.init(io);
+const socketService = require('./utils/socketService');
+socketService.init(io);
 
 // ============================
 // API Routes
