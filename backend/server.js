@@ -26,12 +26,13 @@ const db = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT,
+    connectTimeout: 60000
 });
 
 db.connect((err) => {
     if (err) {
-        console.error('Database connection failed:', err.message);
+        console.error('Database connection failed:', err);
     } else {
         console.log('MySQL Connected Successfully');
     }
@@ -67,7 +68,6 @@ app.use(express.urlencoded({ extended: true }));
 // Static Frontend Files
 // ============================
 
-// For React production build
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // ============================
@@ -91,7 +91,7 @@ app.get('/', (req, res) => {
 // React Catch-All Route
 // ============================
 
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
