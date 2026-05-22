@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const http = require('http');
 const mysql = require('mysql2');
 const { Server } = require('socket.io');
@@ -22,6 +21,17 @@ const alertRoutes = require('./routes/alertRoutes');
 
 const app = express();
 const server = http.createServer(app);
+
+// ============================
+// Middleware
+// ============================
+
+app.use(cors({
+    origin: '*'
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ============================
 // MySQL Database Connection
@@ -44,9 +54,6 @@ db.connect((err) => {
     }
 });
 
-// Make db accessible globally if needed
-module.exports = db;
-
 // ============================
 // Socket.io Configuration
 // ============================
@@ -59,32 +66,11 @@ const io = new Server(server, {
 });
 
 // ============================
-// Socket Service Initialization
+// SOCKET SERVICE DISABLED
 // ============================
 
-try {
-    const socketService = require('./utils/socketService');
-    socketService.init(io);
-} catch (err) {
-    console.log('Socket service not loaded:', err.message);
-}
-
-// ============================
-// Middleware
-// ============================
-
-app.use(cors({
-    origin: '*'
-}));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// ============================
-// Static Frontend Files
-// ============================
-
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+// const socketService = require('./utils/socketService');
+// socketService.init(io);
 
 // ============================
 // API Routes
@@ -96,30 +82,33 @@ app.use('/api/buildings', buildingRoutes);
 app.use('/api/alerts', alertRoutes);
 
 // ============================
+// Root Route
+// ============================
+
+app.get('/', (req, res) => {
+    res.send('Backend Running Successfully');
+});
+
+// ============================
 // Health Check Route
 // ============================
 
 app.get('/health', (req, res) => {
-    res.json({
+    res.status(200).json({
         success: true,
-        message: 'Backend Running Successfully'
+        message: 'Server is healthy'
     });
 });
 
 // ============================
-// Root Endpoint
-// ============================
-
-app.get('/', (req, res) => {
-    res.send('Smart Infrastructure Health Monitoring System Backend Running');
-});
-
-// ============================
-// React Catch-All Route
+// 404 Handler
 // ============================
 
 app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+    res.status(404).json({
+        success: false,
+        message: 'Route Not Found'
+    });
 });
 
 // ============================
