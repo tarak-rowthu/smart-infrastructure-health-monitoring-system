@@ -261,7 +261,7 @@ const renderAnalyticsChart = async () => {
 const initWebSockets = () => {
     if (typeof io === 'undefined') return;
     
-    const socket = io();
+    const socket = io('https://smart-infrastructure-health-monitoring.onrender.com');
     
     socket.on('connect', () => {
         const status = document.getElementById('socket-status');
@@ -453,7 +453,7 @@ const renderBuildingDetails = async () => {
     try {
         console.log(`Fetching rooms for building_id: ${building_id}`);
         // Call backend API exactly as requested
-        const response = await fetch(`http://localhost:3000/buildings/${building_id}/rooms`);
+        const response = await fetch(`https://smart-infrastructure-health-monitoring.onrender.com/api/buildings/${building_id}/rooms`);
         const data = await response.json();
         
         if (!data || !data.success) {

@@ -1,4 +1,5 @@
-const API_BASE_URL = '/api';
+const BACKEND_URL = 'https://smart-infrastructure-health-monitoring.onrender.com';
+const API_BASE_URL = `${BACKEND_URL}/api`;
 
 const api = {
     // Fetch all sensors
