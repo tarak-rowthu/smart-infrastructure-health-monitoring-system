@@ -151,7 +151,7 @@
             saveBtn.disabled = true;
 
             try {
-                const res = await fetch('http://localhost:3000/api/buildings', {
+                const res = await fetch('https://smart-infrastructure-health-monitoring.onrender.com/api/buildings', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, location, type })
@@ -178,7 +178,7 @@
         window.deleteBuilding = async (id) => {
             if (!confirm('Are you sure you want to permanently delete this building and all its rooms and sensors?')) return;
             try {
-                const res = await fetch(`http://localhost:3000/api/buildings/${id}`, { method: 'DELETE' });
+                const res = await fetch(`https://smart-infrastructure-health-monitoring.onrender.com/api/buildings/${id}`, { method: 'DELETE' });
                 const result = await res.json();
                 if (result.success) {
                     if (typeof renderBuildings === 'function') renderBuildings();

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -81,8 +81,8 @@
 
             try {
                 const [roomsRes, buildingsRes] = await Promise.all([
-                    fetch(`http://localhost:3000/buildings/${building_id}/rooms`),
-                    fetch(`http://localhost:3000/api/buildings`)
+                    fetch(`https://smart-infrastructure-health-monitoring.onrender.com/api/buildings/${building_id}/rooms`),
+                    fetch(`https://smart-infrastructure-health-monitoring.onrender.com/api/buildings`)
                 ]);
 
                 if (!roomsRes.ok) throw new Error(`Server error: ${roomsRes.status}`);
