@@ -31,3 +31,4 @@ This is a full-stack application for monitoring the health of IoT infrastructure
 - **Buildings & Rooms**: Manage campus infrastructure.
 - **Sensors**: Monitor real-time telemetry.
 - **Alerts**: Automated alerting for critical infrastructure metrics.
+DEMO website Link:https://smart-infrastructure-health-monitor.vercel.app/login
