@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://localhost:3000';
+const BACKEND_URL = 'https://smart-infrastructure-health-monitoring.onrender.com';
 const API_BASE_URL = `${BACKEND_URL}/api`;
 
 const api = {

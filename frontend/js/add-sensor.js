@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function loadDropdowns() {
         try {
             const [typesRes, roomsRes] = await Promise.all([
-                fetch('http://localhost:3000/api/sensor-types'),
-                fetch('http://localhost:3000/api/rooms')
+                fetch('https://smart-infrastructure-health-monitoring.onrender.com/api/sensor-types'),
+                fetch('https://smart-infrastructure-health-monitoring.onrender.com/api/rooms')
             ]);
 
             const types = await typesRes.json();
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         messageDiv.style.display = 'none';
 
         try {
-            const response = await fetch('http://localhost:3000/api/sensors', {
+            const response = await fetch('https://smart-infrastructure-health-monitoring.onrender.com/api/sensors', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
